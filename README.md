@@ -1,5 +1,3 @@
-Cassini Hackathons
-
 # Description
 This repository contains the example setup, files, converters and everything necessary to make the initial satellite connection from an Arduino device towards the Verhaert platform via Kineis possible and to demonstrate the connectivity.
 
