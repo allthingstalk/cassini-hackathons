@@ -1,2 +1,61 @@
-# cassini-hackathons
- 
+Cassini Hackathons
+
+# Description
+This repository contains the example setup, files, converters and everything necessary to make the initial satellite connection from an Arduino device towards the Verhaert platform via Kineis possible and to demonstrate the connectivity.
+
+# Hardware
+
+> **IMPORTANT:  
+> Make sure not to break off any sensors from the Grove Starter kit** as it's almost impossible to use the grove cables with the Kineis KIM1 module plugged on top of the Seeduino Lotus (Arduino).
+
+Hardware Required:
+- Grove Starter Kit
+- Kineis KIM1 (SPP) + Antenna
+- USB Cable
+
+## Steps
+- Plug the Kineis KIM1 module onto the Seeduino Lotus and make sure the orientation is correct
+- Plug the USB cable into your computer and into the Seeduino Lotus (Grove Starter Kit)
+
+# Software
+
+## Steps
+- Install the newest [Arduino IDE](https://www.arduino.cc/en/software)
+- Download this repository and open "Cassini_Example_Sketch.ino" in folder "Cassini_Example_Sketch"
+- Open Library Manager on the left side (3rd icon from the top), then search for and install:
+    - **'Grove Temperature And Humidity Sensor'** by Seeed Studio
+    - **'Grove - Barometer Sensor BMP280'** by Seeed Studio
+- Click "Select Board" in the upper corner in Arduino IDE and select "Select other board and port...", then search for and select "Arduino Uno" and choose the appropriate port.
+- Compile and upload the sketch
+- Open Serial Monitor in Arduino IDE to see the debug information from the Arduino device.
+
+# Platform
+Platform: [verhaert.allthingstalk.com](https://verhaert.allthingstalk.com)  
+ABCL (AllThingsTalk Binary Conversion Language) guide: [docs.allthingstalk.com/developers/custom-payload-conversion/](https://docs.allthingstalk.com/developers/custom-payload-conversion/)
+
+## Steps
+- On Verhaert platform, add a new Arduino device
+- Go to **Device Settings > Connectivity** and choose **Kineis Satellite**
+- Find the Device ID of your Kineis KIM1 module (6 numbers), enter it in the "Kineis Device ID" field and click "Connect to Network"
+- Create the following assets:
+
+| Name | Title | Type   | Kind   | Unit | Advanced |
+|-------|-------|--------|--------|------|------|
+| temperature | Temperature | number | sensor | °C | |
+| humidity | Humidity | integer | sensor | % | |
+| pressure | Pressure | integer | sensor | Pa | |
+| light | Ligjht | integer | sensor | | |
+| sound | Sound | integer | sensor | | |
+| potentiometer | Potentiometer | integer | sensor | | |
+
+- Open the file "ABCL Converter.json" from this repository and copy its contents
+- Go to **Device Settings > Payload Formats**, choose **ABCL Conversion**, paste the contents of the aforementioned file and save.
+
+# Important Details
+- Make sure to put the device outside when a satellite is passing by
+- The buzzer on the kit will produce a sound when a payload is being sent
+- The LED on the kit will light up when the KIM1 module is active
+- The range for values of light, sound and potentiometer is from 0 to 254
+- The payload being sent to Kineis needs to be **exactly** 23 bytes.
+- If you change the data payload in Arduino, make sure to reflect that in the [ABCL](https://docs.allthingstalk.com/developers/custom-payload-conversion/) on the platform, as well as in assets.
+- Do not use GPIO pin number 4 on the Arduino. This pin is used to power on/off the Kineis KIM1 module. When the Arduino is connected to the grove starter kit, GPIO 4 is the LED module, so you can observe it to figure if the KIM1 is on or off.
