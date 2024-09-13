@@ -1,6 +1,14 @@
 # Description
 This repository contains the Arduino sketch, instructions, payload converters and everything necessary to make the initial satellite connection from an Arduino device towards the [Verhaert Connect](https://verhaert.allthingstalk.com) platform via [Kineis](https://www.kineis.com) possible and to demonstrate the connectivity.  
 
+<p style="text-align:center;"> 
+<a href="https://www.cassini.eu/hackathons"><img src="Extras/cassini_logo.png" width="180" style="margin-right: 20px;filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 1));"> 
+<a href="https://verhaert.com"><img src="Extras/verahert_logo.png" width="180" style="margin-right: 30px;filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.8));"> 
+<a href="https://www.kineis.com"><img src="Extras/kineis_logo.png" width="110" style="margin-right: 30px;filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.6));">
+<a href="https://www.allthingstalk.com"><img src="Extras/allthingstalk_logo.svg" width="130" style="filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.7));> 
+
+#
+
 ![image_1](Extras/image_1.png)
 
 # Hardware
