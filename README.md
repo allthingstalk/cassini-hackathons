@@ -21,34 +21,34 @@ Hardware Required:
 
 ## Steps
 - Install the newest [Arduino IDE](https://www.arduino.cc/en/software)
-- Download this repository and open "Cassini_Example_Sketch.ino" in folder "Cassini_Example_Sketch"
+- Download this repository and open *"Cassini_Example_Sketch.ino"* in folder *"Cassini_Example_Sketch"*
 - Open Library Manager on the left side (3rd icon from the top), then search for and install:
     - **'Grove Temperature And Humidity Sensor'** by Seeed Studio
     - **'Grove - Barometer Sensor BMP280'** by Seeed Studio
-- Click "Select Board" in the upper corner in Arduino IDE and select "Select other board and port...", then search for and select "Arduino Uno" and choose the appropriate port.
+- Click **Select Board** in the upper corner in Arduino IDE and select **Select other board and port...**, then search for and select **Arduino Uno** and choose the appropriate port.
 - Compile and upload the sketch
 - Open Serial Monitor in Arduino IDE to see the debug information from the Arduino device.
 
 # Platform
-Platform: [verhaert.allthingstalk.com](https://verhaert.allthingstalk.com)  
-ABCL (AllThingsTalk Binary Conversion Language) guide: [docs.allthingstalk.com/developers/custom-payload-conversion/](https://docs.allthingstalk.com/developers/custom-payload-conversion/)
+- [Verhaert Connect Platform](https://verhaert.allthingstalk.com)  
+- [AllThingsTalk Binary Conversion Language (ABCL) guide](https://docs.allthingstalk.com/developers/custom-payload-conversion/)
 
 ## Steps
 - On Verhaert platform, add a new Arduino device
 - Go to **Device Settings > Connectivity** and choose **Kineis Satellite**
-- Find the Device ID of your Kineis KIM1 module (6 numbers), enter it in the "Kineis Device ID" field and click "Connect to Network"
+- Find the Device ID of your Kineis KIM1 module (6 numbers), enter it in the **Kineis Device ID** field and click **Connect to Network**
 - Create the following assets:
 
-| Name | Title | Type   | Kind   | Unit | Advanced |
-|-------|-------|--------|--------|------|------|
-| temperature | Temperature | number | sensor | °C | |
-| humidity | Humidity | integer | sensor | % | |
-| pressure | Pressure | integer | sensor | Pa | |
-| light | Ligjht | integer | sensor | | |
-| sound | Sound | integer | sensor | | |
-| potentiometer | Potentiometer | integer | sensor | | |
+| Name | Title | Type   | Kind   | Unit |
+|-------|-------|--------|--------|------|
+| temperature | Temperature | number | sensor | °C |
+| humidity | Humidity | integer | sensor | % |
+| pressure | Pressure | integer | sensor | Pa |
+| light | Ligjht | integer | sensor | |
+| sound | Sound | integer | sensor | |
+| potentiometer | Potentiometer | integer | sensor | |
 
-- Open the file "ABCL Converter.json" from this repository and copy its contents
+- Open the file *"ABCL Converter.json"* from this repository and copy its contents
 - Go to **Device Settings > Payload Formats**, choose **ABCL Conversion**, paste the contents of the aforementioned file and save.
 
 # Important Details
