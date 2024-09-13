@@ -1,7 +1,7 @@
 /* 
 Name:        Cassini Hackathons Example Sketch
 Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
-Version:     0.5.7
+Version:     0.5.8
 Written by:  Vanja S.
 Verhaert x AllThingsTalk x Kineis
 Details:
@@ -45,7 +45,7 @@ DHT dht(DHT20);
 
 byte readLightSensor() {
   byte value = analogRead(LIGHT_SENSOR_PIN);
-  return map(value, 0, 80, 0, 255);
+  return map(value, 0, 300, 0, 255);
 }
 
 byte readSoundSensor() {
@@ -54,7 +54,7 @@ byte readSoundSensor() {
     value += analogRead(SOUND_SENSOR_PIN);
   }
   value >>= 5;
-  return map(value, 0, 100, 0, 255);
+  return map(value, 0, 400, 0, 255);
 }
 
 // Piezo buzzer beep with duration in milliseconds
