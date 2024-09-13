@@ -1,7 +1,7 @@
 /* 
 Name:        Cassini Hackathons Example Sketch
 Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
-Version:     0.5.6
+Version:     0.5.7
 Written by:  Vanja S.
 Verhaert x AllThingsTalk x Kineis
 Details:
@@ -33,7 +33,7 @@ char SAVE[8] = "SAVE_CFG";
 // Variables
 const long    kineisTransmissionInterval = 60;    // Seconds; How often to transmit sensor data
 unsigned long kineisLastTransmissionTime = 0;     // Last time (in ms since boot) a transmission occured
-const long    buttonPressIntervalLimit   = 10;    // Seconds; Minimum delay between button presses that force the data to be sent
+const long    buttonPressIntervalLimit   = 5;    // Seconds; Minimum delay between button presses that force the data to be sent
 unsigned long lastButtonPressTime        = 0;     // Last time (in ms since boot) the button was pressed
 bool          bmp280initialized          = false;
 bool          kim1initialized            = false;
@@ -45,7 +45,7 @@ DHT dht(DHT20);
 
 byte readLightSensor() {
   byte value = analogRead(LIGHT_SENSOR_PIN);
-  return map(value, 0, 800, 0, 255);
+  return map(value, 0, 80, 0, 255);
 }
 
 byte readSoundSensor() {
@@ -54,7 +54,7 @@ byte readSoundSensor() {
     value += analogRead(SOUND_SENSOR_PIN);
   }
   value >>= 5;
-  return map(value, 0, 1023, 0, 255);;
+  return map(value, 0, 100, 0, 255);
 }
 
 // Piezo buzzer beep with duration in milliseconds
@@ -69,7 +69,6 @@ void buzzerBeep(int duration) {
 
 bool readButton() {
   if (digitalRead(BUTTON_PIN) == HIGH) {
-    lastButtonPressTime = millis();
     return true;
   } else {
     return false;
@@ -83,7 +82,8 @@ byte readPotentiometer() {
 
 void readAndSendData() {
   Serial.println(F("System - Reading sensor data..."));
-  int temperature = (int)(dht.readTemperature() * 100); // We multiple the values below because we then divide them on AllThingsTalk and don't need to send floats which use more data
+  float temperatureRaw = dht.readTemperature();
+  int temperature = (int)(temperature * 100); // We multiple the values below because we then divide them on AllThingsTalk and don't need to send floats which use more data
   int humidity = (int)dht.readHumidity();
   int pressure;
   if (bmp280initialized) {
@@ -97,7 +97,7 @@ void readAndSendData() {
   byte potentiometer = readPotentiometer(); 
 
   Serial.print(F("DHT20 - Temperature: "));
-  Serial.print(temperature/100);
+  Serial.print(temperatureRaw);
   Serial.println(F("°C"));
   Serial.print(F("DHT20 - Humidity: "));
   Serial.print(humidity);
@@ -107,13 +107,13 @@ void readAndSendData() {
   Serial.println(F("mbar"));
   Serial.print(F("Light Sensor - Value: "));
   Serial.print(light);
-  Serial.println(F("/254"))
+  Serial.println(F("/255"));
   Serial.print(F("Sound Sensor - Value: "));
   Serial.print(sound);
-  Serial.println(F("/254"))
+  Serial.println(F("/255"));
   Serial.print(F("Potentiometer - Value: "));
   Serial.print(potentiometer);
-  Serial.println(F("/254")
+  Serial.println(F("/255"));
 
   // Build the payload
   const int payloadSize = 9;
@@ -195,7 +195,7 @@ bool initKineis() {
     kim1initialized = false;
     buzzerBeep(1000);
     delay(500);
-    buzzerBeep(1000)
+    buzzerBeep(1000);
 		return false;
 	}
 	Serial.print(F("Kineis - Module ID: "));
@@ -220,8 +220,9 @@ bool initKineis() {
 void setup() {
   Serial.begin(9600);
   delay(200);
-  initKineis();
+  Serial.println(F("System - Booting..."));
   initPeripherals();
+  initKineis();
   Serial.println(F("System - Kineis and Peripherals initialization done."));
 }
 
