@@ -1,15 +1,19 @@
+![Logos](extras/logos.png)  
 # Description
 This repository contains the Arduino sketch, instructions, payload converters and everything necessary to make the initial satellite connection from an Arduino device towards the [Verhaert Connect](https://verhaert.allthingstalk.com) platform via [Kineis](https://www.kineis.com) possible and to demonstrate the connectivity.  
 
-<p style="text-align:center;"> 
-<a href="https://www.cassini.eu/hackathons"><img src="Extras/cassini_logo.png" width="180" style="margin-right: 20px;filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 1));"> 
-<a href="https://verhaert.com"><img src="Extras/verahert_logo.png" width="180" style="margin-right: 30px;filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.8));"> 
-<a href="https://www.kineis.com"><img src="Extras/kineis_logo.png" width="110" style="margin-right: 30px;filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.6));">
-<a href="https://www.allthingstalk.com"><img src="Extras/allthingstalk_logo.svg" width="130" style="filter: drop-shadow(0 1px 5px rgba(0, 0, 0, 0.7));> 
+# How it works
+Arduino (Seeeduino Lotus in this case) is connected to a number of sensors on the same PCB. The Kineis KIM1 module, which enables satellite connectivity, connects to the Arduino as a hat and receives payloads from it. KIM1 then sends the payload directly to Kineis satellites which then relay it to a Kineis ground station, then to Kineis Service platform, and finally to Verhaert Connect platform, where you see your data.  
+  
+The device collects and sends the following data:
+- Temperature
+- Relative Humidity
+- Air Pressure
+- Light (amount of light)
+- Sound (loudness)
+- Potentiometer value
 
-#
-
-![image_1](Extras/image_1.png)
+![Diagram](extras/diagram.png)
 
 # Hardware
 
@@ -48,23 +52,26 @@ Hardware Required:
 > Make sure to disconnect (**Device Settings > Connectivity > Disconnect**) before handing off the Kineis KIM1 module to other attendees so they can connect it to their device on the platform.
 - Create the following assets:
 
-| Name | Title | Type   | Kind   | Unit |
-|-------|-------|--------|--------|------|
-| temperature | Temperature | number | sensor | °C |
-| humidity | Humidity | integer | sensor | % |
-| pressure | Pressure | integer | sensor | Pa |
-| light | Light | integer | sensor | |
-| sound | Sound | integer | sensor | |
-| potentiometer | Potentiometer | integer | sensor | |
+| Name | Title | Type   | Kind   | Unit |  Advanced |
+|-------|-------|--------|--------|------|------|
+| temperature | Temperature | number | sensor | °C | Min: -100, Max: 100 |
+| humidity | Humidity | integer | sensor | % | Min: 0, Max: 100 |
+| pressure | Pressure | integer | sensor | mbar | Min: 0, Max: 2000 |
+| light | Light | integer | sensor | | Min: 0, Max: 255 |
+| sound | Sound | integer | sensor | | Min: 0, Max: 255 |
+| potentiometer | Potentiometer | integer | sensor | | Min: 0, Max: 255 |
 
 - Open the file *"ABCL Converter.json"* from this repository and copy its contents.
 - Go to **Device Settings > Payload Formats**, choose **ABCL Conversion**, paste the contents of the aforementioned file and save.
 
 # Important Details
 - Make sure to put the device outside when a satellite is passing by.
-- The buzzer on the kit will produce a sound when a payload is being sent.
+- The buzzer on the kit will produce a sound:
+    - When KIM1 is not detected: Two times for 1 sec with a 500ms pause
+    - When payload sending fails: One time for 200ms
+    - When the button is pressed and registered: One time for 50ms
 - The LED on the kit will light up when the KIM1 module is active.
-- The range for values of light, sound and potentiometer is from 0 to 254.
+- The range for values of light, sound and potentiometer is from 0 to 255.
 - The payload being sent to Kineis needs to be **exactly** 23 bytes.
 - If you change the data payload in Arduino, make sure to reflect that in the [ABCL](https://docs.allthingstalk.com/developers/custom-payload-conversion/) on the platform, as well as in assets.
 - Do not use GPIO pin number 4 on the Arduino. This pin is used to power on/off the Kineis KIM1 module. When the Arduino is connected to the grove starter kit, GPIO 4 is the LED module, so you can observe it to figure if the KIM1 is on or off.
