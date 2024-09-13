@@ -1,14 +1,16 @@
 # Description
-This repository contains the example setup, files, converters and everything necessary to make the initial satellite connection from an Arduino device towards the Verhaert platform via Kineis possible and to demonstrate the connectivity.
+This repository contains the Arduino sketch, instructions, payload converters and everything necessary to make the initial satellite connection from an Arduino device towards the [Verhaert Connect](https://verhaert.allthingstalk.com) platform via [Kineis](https://www.kineis.com) possible and to demonstrate the connectivity.  
+
+![image_1](Extras/image_1.png)
 
 # Hardware
 
-> **IMPORTANT:  
-> Make sure not to break off any sensors from the Grove Starter kit** as it's almost impossible to use the grove cables with the Kineis KIM1 module plugged on top of the Seeduino Lotus (Arduino).
+> **IMPORTANT:**  
+> Make sure not to break off any sensors from the Grove Starter Kit as it's almost impossible to use the grove cables with the Kineis KIM1 module plugged on top of the Seeduino Lotus (Arduino).
 
 Hardware Required:
-- Grove Starter Kit
-- Kineis KIM1 (SPP) + Antenna
+- [Grove Starter Kit](https://wiki.seeedstudio.com/Grove-Beginner-Kit-For-Arduino/)
+- [Kineis SPP (KIM1)](https://www.kineis.com/en/space_priority_program/) + Antenna
 - USB Cable
 
 ## Steps
