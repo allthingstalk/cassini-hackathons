@@ -1,7 +1,7 @@
 /* 
 Name:        Cassini Hackathons Example Sketch
 Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
-Version:     0.5.4
+Version:     0.5.5
 Written by:  Vanja S.
 Verhaert x AllThingsTalk x Kineis
 Details:
@@ -18,9 +18,9 @@ Details:
 // Pin Definitions for sensors and actuators. Display, BMP280, DHT20 and Accelerometer are I2C.
 #define BUZZER_PIN         5
 #define BUTTON_PIN         6
-#define POTENTIOMETER_PIN  0
-#define LIGHT_SENSOR_PIN   6
-#define SOUND_SENSOR_PIN   2
+#define POTENTIOMETER_PIN  A0
+#define SOUND_SENSOR_PIN   A2
+#define LIGHT_SENSOR_PIN   A6
 
 // Kineis KIM1 AT Commands
 char ID[2]   = "ID";
@@ -224,6 +224,7 @@ void loop() {
     kineisLastTransmissionTime = millis();
   }
   if (readButton() && millis() - lastButtonPressTime >= buttonPressIntervalLimit * 1000) {
+    Serial.println("Button - Pressed");
     readAndSendData();
     kineisLastTransmissionTime = millis();
     lastButtonPressTime = millis();
