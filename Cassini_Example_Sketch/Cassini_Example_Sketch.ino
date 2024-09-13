@@ -1,7 +1,7 @@
 /* 
 Name:        Cassini Hackathons Example Sketch
 Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
-Version:     0.5.5
+Version:     0.5.6
 Written by:  Vanja S.
 Verhaert x AllThingsTalk x Kineis
 Details:
@@ -57,8 +57,9 @@ byte readSoundSensor() {
   return map(value, 0, 1023, 0, 255);;
 }
 
-void buzzerBeep() {
-  for (int i=0; i<125; i++) {
+// Piezo buzzer beep with duration in milliseconds
+void buzzerBeep(int duration) {
+  for (int i=0; i<duration/4; i++) {
     digitalWrite(BUZZER_PIN, HIGH);
     delay(2);
     digitalWrite(BUZZER_PIN, LOW);
@@ -97,18 +98,22 @@ void readAndSendData() {
 
   Serial.print(F("DHT20 - Temperature: "));
   Serial.print(temperature/100);
-  Serial.print(F("°C, Humidity: "));
+  Serial.println(F("°C"));
+  Serial.print(F("DHT20 - Humidity: "));
   Serial.print(humidity);
   Serial.println(F("%"));
-  Serial.print(F("Light Sensor - Value: "));
-  Serial.println(light);
-  Serial.print(F("Sound Sensor - Value: "));
-  Serial.println(sound);
   Serial.print(F("BMP280 - Pressure: "));
   Serial.print(pressure);
-  Serial.println(F(" Pa"));
+  Serial.println(F("mbar"));
+  Serial.print(F("Light Sensor - Value: "));
+  Serial.print(light);
+  Serial.println(F("/254"))
+  Serial.print(F("Sound Sensor - Value: "));
+  Serial.print(sound);
+  Serial.println(F("/254"))
   Serial.print(F("Potentiometer - Value: "));
-  Serial.println(potentiometer);
+  Serial.print(potentiometer);
+  Serial.println(F("/254")
 
   // Build the payload
   const int payloadSize = 9;
@@ -142,10 +147,10 @@ void readAndSendData() {
     kineis.KIM_sendATCommandSet(TX, sizeof(TX), hexPayload, sizeof(hexPayload) - 1);
     delay(1000); // Wait for the KIM1 to finish transmission
     if (kineis.KIM_getState() == KIM_OK) {
-      Serial.println(F("Kineis - Data sent!"));
-        buzzerBeep();
+      Serial.println(F("Kineis - Payload sent!"));
     } else {
       Serial.println(F("Kineis - Error!"));
+      buzzerBeep(200);
     }
     Serial.println(F("Kineis - Powering off KIM1 Module."));
     kineis.KIM_powerON(false);
@@ -188,6 +193,9 @@ bool initKineis() {
 	} else {
 		Serial.println(F("Kineis - Power up failed. Make sure the Kineis SPP (KIM1) Module is connected and the wiring is correct. Booting without the KIM1 Module."));
     kim1initialized = false;
+    buzzerBeep(1000);
+    delay(500);
+    buzzerBeep(1000)
 		return false;
 	}
 	Serial.print(F("Kineis - Module ID: "));
@@ -205,7 +213,6 @@ bool initKineis() {
 	Serial.println(kineis.KIM_sendATCommandGet(PWR, sizeof(PWR)));
   /* Save configuration */
   kineis.KIM_sendATCommandSet(SAVE, sizeof(SAVE), "", sizeof("") );
-  buzzerBeep();
   kim1initialized = true;
   return true;
 }
@@ -225,6 +232,7 @@ void loop() {
   }
   if (readButton() && millis() - lastButtonPressTime >= buttonPressIntervalLimit * 1000) {
     Serial.println("Button - Pressed");
+    buzzerBeep(50);
     readAndSendData();
     kineisLastTransmissionTime = millis();
     lastButtonPressTime = millis();
