@@ -1,16 +1,21 @@
-// Cassini Hackathons Example Sketch
-// Version 0.5.3
-// Verhaert x AllThingsTalk x Kineis
-// Written by Vanja S.
-// Details:
-// Do not use pin number 4. This pin is used to power on/off the Kineis KIM1 module. On the grove starter kit, pin 4 is the LED, so you can observe it to figure if the KIM1 is on or off.
+/* 
+Name:        Cassini Hackathons Example Sketch
+Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
+Version:     0.5.4
+Written by:  Vanja S.
+Verhaert x AllThingsTalk x Kineis
+Details:
+ - Do not use pin number 4. This pin is used to power on/off the Kineis KIM1 module. On the grove starter kit, pin 4 is the LED, so you can observe it to figure if the KIM1 is on or off.
+ - Do not break off the sensors from the Grove Starter Kit.
+ - Make sure to reflect any payload changes in the ABCL Converter on the platform.
+*/
 
 #include <Wire.h>
+#include "KIM_Arduino_Library.h"
 #include <Grove_Temperature_And_Humidity_Sensor.h> // Install "Grove Temperature And Humidity Sensor" by Seeed Studio
 #include <Seeed_BMP280.h> // Install "Grove - Barometer Sensor BMP280" by Seeed Studio
-#include "KIM_Arduino_Library.h"
 
-// Pin Definitions for sensors and actuators. Display, BMP280 and Accelerometer are I2C.
+// Pin Definitions for sensors and actuators. Display, BMP280, DHT20 and Accelerometer are I2C.
 #define BUZZER_PIN         5
 #define BUTTON_PIN         6
 #define POTENTIOMETER_PIN  0
@@ -26,9 +31,9 @@ char AFMT[4] = "AFMT";
 char SAVE[8] = "SAVE_CFG";
 
 // Variables
-const int     kineisTransmissionInterval = 60;    // Seconds; How often to transmit sensor data
+const long    kineisTransmissionInterval = 60;    // Seconds; How often to transmit sensor data
 unsigned long kineisLastTransmissionTime = 0;     // Last time (in ms since boot) a transmission occured
-const int     buttonPressIntervalLimit   = 10;    // Seconds; Minimum delay between button presses that force the data to be sent
+const long    buttonPressIntervalLimit   = 10;    // Seconds; Minimum delay between button presses that force the data to be sent
 unsigned long lastButtonPressTime        = 0;     // Last time (in ms since boot) the button was pressed
 bool          bmp280initialized          = false;
 bool          kim1initialized            = false;
@@ -145,7 +150,7 @@ void readAndSendData() {
     Serial.println(F("Kineis - Powering off KIM1 Module."));
     kineis.KIM_powerON(false);
   } else {
-    Serial.print(F("Kineis - KIM1 is not initialized or connected, so the following payload can't be sent: "))
+    Serial.print(F("Kineis - KIM1 is not initialized or connected, so the following payload can't be sent: "));
     Serial.println(hexPayload);
   }
 }
@@ -181,7 +186,7 @@ bool initKineis() {
 	if (kineis.KIM_check()) {
     Serial.println(F("Kineis - Success! Module is connected. Reading configuration..."));
 	} else {
-		Serial.println(F("Kineis - Power up failed. Make sure the Kineis SPP (KIM1) Module is connected and the wiring is correct."));
+		Serial.println(F("Kineis - Power up failed. Make sure the Kineis SPP (KIM1) Module is connected and the wiring is correct. Booting without the KIM1 Module."));
     kim1initialized = false;
 		return false;
 	}
@@ -200,12 +205,13 @@ bool initKineis() {
 	Serial.println(kineis.KIM_sendATCommandGet(PWR, sizeof(PWR)));
   /* Save configuration */
   kineis.KIM_sendATCommandSet(SAVE, sizeof(SAVE), "", sizeof("") );
+  buzzerBeep();
   kim1initialized = true;
   return true;
 }
 
 void setup() {
-	Serial.begin(9600);
+  Serial.begin(9600);
   delay(200);
   initKineis();
   initPeripherals();
