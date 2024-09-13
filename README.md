@@ -44,7 +44,7 @@ Hardware Required:
 | temperature | Temperature | number | sensor | °C |
 | humidity | Humidity | integer | sensor | % |
 | pressure | Pressure | integer | sensor | Pa |
-| light | Ligjht | integer | sensor | |
+| light | Light | integer | sensor | |
 | sound | Sound | integer | sensor | |
 | potentiometer | Potentiometer | integer | sensor | |
 
