@@ -1,7 +1,7 @@
 /* 
 Name:        Cassini Hackathons Example Sketch
 Description: Send sensor data from Arduino to Verhaert Connect Platform via Kineis Satellite
-Version:     0.5.8
+Version:     0.5.9
 Written by:  Vanja S.
 Verhaert x AllThingsTalk x Kineis
 Details:
@@ -83,7 +83,7 @@ byte readPotentiometer() {
 void readAndSendData() {
   Serial.println(F("System - Reading sensor data..."));
   float temperatureRaw = dht.readTemperature();
-  int temperature = (int)(temperature * 100); // We multiple the values below because we then divide them on AllThingsTalk and don't need to send floats which use more data
+  int temperature = (int)(temperatureRaw * 100); // We multiple the values below because we then divide them on AllThingsTalk and don't need to send floats which use more data
   int humidity = (int)dht.readHumidity();
   int pressure;
   if (bmp280initialized) {
