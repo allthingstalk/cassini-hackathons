@@ -187,30 +187,30 @@ void initPeripherals() {
 bool initKineis() {
   Serial.println(F("Kineis - Powering up Kineis Satellite Connectivity Module..."));
   kineis.KIM_powerON(true);
-	kineis.KIM_userWakeupPinToggle();
-	if (kineis.KIM_check()) {
+  kineis.KIM_userWakeupPinToggle();
+  if (kineis.KIM_check()) {
     Serial.println(F("Kineis - Success! Module is connected. Reading configuration..."));
-	} else {
-		Serial.println(F("Kineis - Power up failed. Make sure the Kineis SPP (KIM1) Module is connected and the wiring is correct. Booting without the KIM1 Module."));
+  } else {
+    Serial.println(F("Kineis - Power up failed. Make sure the Kineis SPP (KIM1) Module is connected and the wiring is correct. Booting without the KIM1 Module."));
     kim1initialized = false;
     buzzerBeep(1000);
     delay(500);
     buzzerBeep(1000);
-		return false;
+    return false;
 	}
 	Serial.print(F("Kineis - Module ID: "));
 	Serial.println(kineis.KIM_sendATCommandGet(ID, sizeof(ID)));
 	Serial.print(F("Kineis - Module Firmware: "));
 	Serial.println(kineis.KIM_sendATCommandGet(FW, sizeof(FW)));
- 	// Set Format frame configuration
+ 	// Set Format frame configuration.
   Serial.println(F("Kineis - Setting frame format..."));
   kineis.KIM_sendATCommandSet(AFMT, sizeof(AFMT), "1,16,32", sizeof("1,16,32") );
-	Serial.print(F("Kineis - Frame Format: "));
-	Serial.println(kineis.KIM_sendATCommandGet(AFMT, sizeof(AFMT)));
-	/* Set TX configuration */
-	kineis.KIM_sendATCommandSet(PWR, sizeof(PWR), "1000", sizeof("1000") - 1);
-	Serial.print(F("Kineis - Transmission Power: "));
-	Serial.println(kineis.KIM_sendATCommandGet(PWR, sizeof(PWR)));
+  Serial.print(F("Kineis - Frame Format: "));
+  Serial.println(kineis.KIM_sendATCommandGet(AFMT, sizeof(AFMT)));
+  /* Set TX configuration */
+  kineis.KIM_sendATCommandSet(PWR, sizeof(PWR), "1000", sizeof("1000") - 1);
+  Serial.print(F("Kineis - Transmission Power: "));
+  Serial.println(kineis.KIM_sendATCommandGet(PWR, sizeof(PWR)));
   /* Save configuration */
   kineis.KIM_sendATCommandSet(SAVE, sizeof(SAVE), "", sizeof("") );
   kim1initialized = true;
